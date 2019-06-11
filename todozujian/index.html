@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Todo</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="vue.min.js"></script>
+    <style>
+        .finish{
+            color:chartreuse;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+   <nav class="navbar navbar default">
+       <p class="navbar-text">todos</p>
+   </nav> 
+   <div id="app" class="container col-md-8 col-md-offset-2">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class=" panel-heading">Welcome to Vue.js 2.0</div>
+                <div class="panel-body">
+                    <h4>My Todos {{todoCount}}</h4>
+                    <todo-items :todos="todos"></todo-items>
+                    <todo-form :todos="todos"></todo-form>
+                    <div class="alert alert-info">请在下方添加您想要做的事</div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+        <!--ul todo-items-template-->
+    <script type="text/x-template" id="todo-items-template">
+        <ul class="list-group">
+                <li class="list-group-item"
+                    v-bind:class="{'finsh' : todo.status}"
+                    v-for="(todo,index) in todos"
+                >{{todo.title}}
+                    <button @click="del(index)" class="btn btn-danger btn-xs pull-right">删除</button>
+                    <button 
+                        @click="status(todo)" 
+                        :class="[todo.status?'btn-warning':'btn-success']"
+                        class="btn btn-success btn-xs pull-right"
+                        >
+                        {{todo.status?'未完成':'完成'}}
+                    </button>
+                </li>
+            </ul>
+    </script>
+    <!--form todo-add-form-template-->
+    <script type="text/x-template" id="todo-add-form-template">
+        <form v-on:submit.prevent="add()">
+                <div class="form-group">
+                    <input v-model="newTodo.title" type="text" placeholder="请输入您想要做的事" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">添加</button>
+                </div>
+            </form>
+    </script>
+   <script>
+       Vue.component('todo-items',{
+           template:"#todo-items-template",
+           props:["todos"],
+           methods:{
+           del(index){
+               this.todos.splice(index,1);
+           },
+           status(todo){
+                todo.status=!todo.status
+           }
+        }
+       })
+       Vue.component("todo-form",{
+           template:"#todo-add-form-template",
+           props:["todos"],
+           data(){
+               return{
+                newTodo:{title:"",status:false} 
+               }
+           },
+           methods:{
+            add(){
+               this.todos.push(this.newTodo);
+               this.newTodo={title:"",status:false};
+               //console.log(this.newTodo);
+           }
+        }
+       })
+   new Vue({
+       el:"#app",
+       data:{
+           todos:[
+                {title:"aaaaa",status:false},
+                {title:"bbbbb",status:false}
+           ],
+       },
+       computed:{
+            todoCount:function(){
+                return this.todos.length
+            }
+       }  
+   })
+   
+   </script>
+</body>
+</html>

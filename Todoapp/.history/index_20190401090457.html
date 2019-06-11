@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="vue.min.js"></script>
+    <style>
+        .finsh{
+            color: chartreuse;
+            text-t
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <p class="navbar-text">todos</p>
+    </nav>
+    <div id="app" class="container col-md-8 col-md-offset-2">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class=" panel-heading">Welcome to Vue.js 2.0</div>
+                <div class="panel-body">
+                    <h4>My Todos {{todosCount}}</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item"
+                            v-for="(todo,index) in todos"
+                        >{{todo.title}}
+                            <button @click="del(index)" class="btn btn-danger btn-xs pull-right">删除</button>
+                            <button @click="status(todo)" class="btn btn-success btn-xs pull-right">完成</button>
+                        </li>
+                    </ul>
+                    <div class="alert alert-info">请在下方添加您想要做的事</div>
+                    <form v-on:submit.prevent="add()">
+                        <div class="form-group">
+                            <input v-model="newTodo.title" type="text" placeholder="请输入您想要做的事" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">添加</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el : "#app",
+            data : {
+                todos : [
+                    {title : "学习",status : false},
+                    {title : "制定学习计划",status : false}
+                ],
+                newTodo : {title : ""}
+            },
+            computed: {
+                todosCount(){
+                    return this.todos.length;
+                }
+            },
+            methods: {
+                add(){
+                    this.todos.push(this.newTodo);
+                    this.newTodo = {title : ""};
+                },
+                del(index){
+                    this.todos.splice(index,1);
+                },
+                status(todo){
+                    todo.status = !todo.status;
+                    console.log(todo);
+                }
+            },
+        });
+    
+    </script>
+</body>
+</html>
